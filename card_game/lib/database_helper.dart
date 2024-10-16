@@ -1,6 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -68,7 +70,7 @@ class DatabaseHelper {
     cards[7]['imageUrl'] = 'https://www.totalnonsense.com/b-w_8.png'; // 8 of Hearts
     cards[8]['imageUrl'] = 'https://www.totalnonsense.com/b-w_9.png'; // 9 of Hearts
     cards[9]['imageUrl'] = 'https://www.totalnonsense.com/b-w_10.png'; // 10 of Hearts
-    cards[10]['imageUrl'] = 'https://www.totalnonsense.com/b-w_jack.png'; // Jack of Hearts
+    cards[10]['imageUrl'] = 'https://www.totalnonsense.com/grayscale_jack.png'; // Jack of Hearts
     cards[11]['imageUrl'] = 'https://www.totalnonsense.com/b-w_queen.png'; // Queen of Hearts
     cards[12]['imageUrl'] = 'https://www.totalnonsense.com/b-w_king.png'; // King of Hearts
 
@@ -117,5 +119,32 @@ class DatabaseHelper {
   Future<void> deleteCard(int id) async {
     Database db = await database;
     await db.delete('cards', where: 'id = ?', whereArgs: [id]);
+  }
+
+Future<List<Card>> fetchCards() async {
+    final db = await _instance.database;
+    final List<Map<String, dynamic>> cardMaps = await db.query('cards');
+    return List.generate(cardMaps.length, (i) {
+      return Card.fromMap(cardMaps[i]);
+    });
+  }
+}
+
+
+
+class Card {
+  final int id;
+  final String name;
+  final String imageUrl;
+
+  Card({required this.id, required this.name, required this.imageUrl});
+
+  // Map card data from SQLite DB to Card object
+  factory Card.fromMap(Map<String, dynamic> map) {
+    return Card(
+      id: map['id'],
+      name: map['name'],
+      imageUrl: map['imageUrl'],
+    );
   }
 }
