@@ -65,19 +65,19 @@ class DatabaseHelper {
  
   // Prepopulate 13 cards with different suits
   List<Map<String, dynamic>> prepopulatedCards = [
-    {'name': 'Ace of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/ace_hearts.png', 'folderId': heartsId},
-    {'name': 'King of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/king_hearts.png', 'folderId': heartsId},
-    {'name': 'Queen of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/queen_hearts.png', 'folder_id': heartsId},
-    {'name': 'Ace of Spades', 'suit': 'Spades', 'imageUrl': 'https://example.com/ace_spades.png', 'folder_id': spadesId},
-    {'name': 'King of Spades', 'suit': 'Spades', 'image_url': 'https://example.com/king_spades.png', 'folder_id': spadesId},
-    {'name': 'Queen of Spades', 'suit': 'Spades', 'imageUrl': 'https://example.com/queen_spades.png', 'folder_id': spadesId},
-    {'name': 'Ace of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/ace_diamonds.png', 'folder_id': diamondsId},
-    {'name': 'King of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/king_diamonds.png', 'folder_id': diamondsId},
+    {'name': 'Ace of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Playing_card_heart_A.svg/800px-Playing_card_heart_A.svg.png', 'folderId': heartsId},
+    {'name': 'King of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ZrlP8ylZL8JRT-T4VDDqwLmLppx_I6IOeA&s', 'folderId': heartsId},
+    {'name': 'Queen of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://i.etsystatic.com/5199369/r/il/f9a5d8/2811187962/il_fullxfull.2811187962_sb8r.jpg', 'folder_id': heartsId},
+    {'name': 'Ace of Spades', 'suit': 'Spades', 'imageUrl': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/01_of_spades_A.svg/1200px-01_of_spades_A.svg.png', 'folder_id': spadesId},
+    {'name': 'King of Spades', 'suit': 'Spades', 'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGZYVVfsGHpfwICusY5xeUcEp1rMoBAgh6HA&s', 'folder_id': spadesId},
+    {'name': 'Queen of Spades', 'suit': 'Spades', 'imageUrl': 'https://media.istockphoto.com/id/1487488158/vector/ace-of-diamonds-playing-card-with-clipping-path-3d-illustration.jpg?s=612x612&w=0&k=20&c=Izkcoy9CkjWVws8BPFN0V3kAkSQKcmzaak6PsEzRDq8=', 'folder_id': spadesId},
+    {'name': 'Ace of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://www.keen.com/wp-content/uploads/sites/2/2022/08/Ace-of-Diamonds-Meaning-scaled.jpg', 'folder_id': diamondsId},
+    {'name': 'King of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://m.media-amazon.com/images/I/71EkglvyWjL._AC_UF1000,1000_QL80_.jpg', 'folder_id': diamondsId},
     {'name': 'Queen of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/queen_diamonds.png', 'folder_id': diamondsId},
-    {'name': 'Ace of Clubs', 'suit': 'Clubs', 'image_url': 'https://example.com/ace_clubs.png', 'folder_id': clubsId},
-    {'name': 'King of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://example.com/king_clubs.png', 'folder_id': clubsId},
-    {'name': 'Queen of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://example.com/queen_clubs.png', 'folder_id': clubsId},
-    {'name': 'Jack of Clubs', 'suit': 'Clubs', 'image_url': 'https://example.com/jack_clubs.png', 'folder_id': clubsId},
+    {'name': 'Ace of Clubs', 'suit': 'Clubs', 'image_url': 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Ace_of_clubs.png', 'folder_id': clubsId},
+    {'name': 'King of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://t4.ftcdn.net/jpg/03/63/34/15/360_F_363341511_Sjj7wKn8VLw4bFFDKvTInEurq9P06SAO.jpg', 'folder_id': clubsId},
+    {'name': 'Queen of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://as1.ftcdn.net/v2/jpg/05/44/97/40/1000_F_544974061_xqzOrYqQphAuL4ITHjtubB5mBMDPOsbA.jpg', 'folder_id': clubsId},
+    {'name': 'Jack of Clubs', 'suit': 'Clubs', 'image_url': 'https://media.istockphoto.com/id/163680097/photo/playing-card-jack-of-clubs.jpg?s=612x612&w=0&k=20&c=ca9ofn7fCugcgHB2G9WU1cEH8TOw48OuwbgjOpZwzDQ=', 'folder_id': clubsId},
   ];
 
    for (var card in prepopulatedCards) {
