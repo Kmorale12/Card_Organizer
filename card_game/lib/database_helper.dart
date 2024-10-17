@@ -2,9 +2,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() => _instance;
+  static final DatabaseHelper instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => instance;
   static Database? _database;
+
+
 
   DatabaseHelper._internal();
 
@@ -43,38 +45,45 @@ class DatabaseHelper {
       )
     ''');
 
-    // Prepopulate cards table
-    List<Map<String, dynamic>> cards = [];
-    List<String> suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs'];
-    for (String suit in suits) {
-      for (int i = 1; i <= 13; i++) {
-        cards.add({
-          'name': '$i of $suit',
-          'suit': suit,
-          'imageUrl': 'https://example.com/$i_of_$suit.png',
-          'folderId': null,
-        });
-      }
-    }
+    await db.insert('folders', {'name': 'Hearts'});
+    await db.insert('folders', {'name': 'Spades'});
+    await db.insert('folders', {'name': 'Diamonds'});
+    await db.insert('folders', {'name': 'Clubs'});
 
-    // Update the imageUrl for specific cards
-    cards[0]['imageUrl'] = 'https://www.totalnonsense.com/b-w_ace.png'; // Ace of Hearts
-    cards[1]['imageUrl'] = 'https://www.totalnonsense.com/b-w_2.png'; // 2 of Hearts
-    cards[2]['imageUrl'] = 'https://www.totalnonsense.com/b-w_3.png'; // 3 of Hearts
-    cards[3]['imageUrl'] = 'https://www.totalnonsense.com/b-w_4.png'; // 4 of Hearts
-    cards[4]['imageUrl'] = 'https://www.totalnonsense.com/b-w_5.png'; // 5 of Hearts
-    cards[5]['imageUrl'] = 'https://www.totalnonsense.com/b-w_6.png'; // 6 of Hearts
-    cards[6]['imageUrl'] = 'https://www.totalnonsense.com/b-w_7.png'; // 7 of Hearts
-    cards[7]['imageUrl'] = 'https://www.totalnonsense.com/b-w_8.png'; // 8 of Hearts
-    cards[8]['imageUrl'] = 'https://www.totalnonsense.com/b-w_9.png'; // 9 of Hearts
-    cards[9]['imageUrl'] = 'https://www.totalnonsense.com/b-w_10.png'; // 10 of Hearts
-    cards[10]['imageUrl'] = 'https://www.totalnonsense.com/grayscale_jack.png'; // Jack of Hearts
-    cards[11]['imageUrl'] = 'https://www.totalnonsense.com/b-w_queen.png'; // Queen of Hearts
-    cards[12]['imageUrl'] = 'https://www.totalnonsense.com/b-w_king.png'; // King of Hearts
+  
+    
+     // Fetch folder IDs to associate with cards
+  List<Map<String, dynamic>> folders = await db.query('folders');
+  int heartsId = folders.firstWhere((folder) => folder['name'] == 'Hearts')['id'];
+  int spadesId = folders.firstWhere((folder) => folder['name'] == 'Spades')['id'];
+  int diamondsId = folders.firstWhere((folder) => folder['name'] == 'Diamonds')['id'];
+  int clubsId = folders.firstWhere((folder) => folder['name'] == 'Clubs')['id'];
 
-    for (var card in cards) {
-      await db.insert('cards', card);
-    }
+ await db.insert('cards', {'name': 'Ace of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/ace_hearts.png', 'folderId': heartsId});
+ await db.insert('cards', {'name': 'Ace of Hearts', 'suit': 'Spades', 'imageUrl': 'https://example.com/ace_hearts.png', 'folderId': spadesId});
+ 
+ 
+  // Prepopulate 13 cards with different suits
+  List<Map<String, dynamic>> prepopulatedCards = [
+    {'name': 'Ace of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/ace_hearts.png', 'folderId': heartsId},
+    {'name': 'King of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/king_hearts.png', 'folderId': heartsId},
+    {'name': 'Queen of Hearts', 'suit': 'Hearts', 'imageUrl': 'https://example.com/queen_hearts.png', 'folder_id': heartsId},
+    {'name': 'Ace of Spades', 'suit': 'Spades', 'imageUrl': 'https://example.com/ace_spades.png', 'folder_id': spadesId},
+    {'name': 'King of Spades', 'suit': 'Spades', 'image_url': 'https://example.com/king_spades.png', 'folder_id': spadesId},
+    {'name': 'Queen of Spades', 'suit': 'Spades', 'imageUrl': 'https://example.com/queen_spades.png', 'folder_id': spadesId},
+    {'name': 'Ace of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/ace_diamonds.png', 'folder_id': diamondsId},
+    {'name': 'King of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/king_diamonds.png', 'folder_id': diamondsId},
+    {'name': 'Queen of Diamonds', 'suit': 'Diamonds', 'imageUrl': 'https://example.com/queen_diamonds.png', 'folder_id': diamondsId},
+    {'name': 'Ace of Clubs', 'suit': 'Clubs', 'image_url': 'https://example.com/ace_clubs.png', 'folder_id': clubsId},
+    {'name': 'King of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://example.com/king_clubs.png', 'folder_id': clubsId},
+    {'name': 'Queen of Clubs', 'suit': 'Clubs', 'imageUrl': 'https://example.com/queen_clubs.png', 'folder_id': clubsId},
+    {'name': 'Jack of Clubs', 'suit': 'Clubs', 'image_url': 'https://example.com/jack_clubs.png', 'folder_id': clubsId},
+  ];
+
+   for (var card in prepopulatedCards) {
+    await db.insert('cards', card);
+  }
+   
   }
 
   // CRUD operations for folders and cards
@@ -123,28 +132,46 @@ class DatabaseHelper {
     await db.delete('cards', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<List<Card>> fetchCards() async {
-    final db = await _instance.database;
-    final List<Map<String, dynamic>> cardMaps = await db.query('cards');
-    return List.generate(cardMaps.length, (i) {
-      return Card.fromMap(cardMaps[i]);
-    });
+   Future<List<Map<String, dynamic>>> getCardsByFolder(int folderId) async {
+    final db = await database;
+    return await db.query('cards', where: 'folderId = ?', whereArgs: [folderId]);
+  }
+
+ 
+}
+
+class Folder {
+  int? id;
+  String folderName;
+  String timestamp;
+
+  Folder({this.id, required this.folderName, required this.timestamp});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': folderName,
+      'timestamp': timestamp,
+    };
   }
 }
 
-class Card {
-  final int id;
-  final String name;
-  final String imageUrl;
+class CardModel {
+  int? id;
+  String name;
+  String suit;
+  String imageUrl;
+  int folderId;
 
-  Card({required this.id, required this.name, required this.imageUrl});
+  CardModel({this.id, required this.name, required this.suit, required this.imageUrl, required this.folderId});
 
-  // Map card data from SQLite DB to Card object
-  factory Card.fromMap(Map<String, dynamic> map) {
-    return Card(
-      id: map['id'],
-      name: map['name'],
-      imageUrl: map['imageUrl'],
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'suit': suit,
+      'imageUrl': imageUrl,
+      'folderId': folderId,
+    };
   }
 }
