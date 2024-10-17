@@ -1,8 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
-
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -97,6 +95,10 @@ class DatabaseHelper {
 
   Future<void> insertCard(Map<String, dynamic> card) async {
     Database db = await database;
+    int count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM cards WHERE folderId = ?', [card['folderId']]))!;
+    if (count >= 6) {
+      throw Exception('This folder can only hold 6 cards.');
+    }
     await db.insert('cards', card);
   }
 
@@ -121,7 +123,7 @@ class DatabaseHelper {
     await db.delete('cards', where: 'id = ?', whereArgs: [id]);
   }
 
-Future<List<Card>> fetchCards() async {
+  Future<List<Card>> fetchCards() async {
     final db = await _instance.database;
     final List<Map<String, dynamic>> cardMaps = await db.query('cards');
     return List.generate(cardMaps.length, (i) {
@@ -129,8 +131,6 @@ Future<List<Card>> fetchCards() async {
     });
   }
 }
-
-
 
 class Card {
   final int id;
